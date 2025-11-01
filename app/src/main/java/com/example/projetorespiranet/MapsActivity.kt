@@ -25,28 +25,28 @@ class MapsActivity : AppCompatActivity() {
                 item -> when(item.itemId){
             R.id.menu_home -> {
                 val intent = Intent(this, MainActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                intent.addFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 startActivity(intent)
                 overridePendingTransition(0, 0)
                 true
             }
             R.id.menu_maps -> {
                 val intent = Intent(this, MapsActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                intent.addFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 startActivity(intent)
                 overridePendingTransition(0, 0)
                 true
             }
             R.id.menu_graphics -> {
                 val intent = Intent(this, GraphicsActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                intent.addFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 startActivity(intent)
                 overridePendingTransition(0, 0)
                 true
             }
             R.id.menu_settings -> {
                 val intent = Intent(this, SettingsActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                intent.addFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 startActivity(intent)
                 overridePendingTransition(0, 0)
                 true
