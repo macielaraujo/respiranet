@@ -18,35 +18,36 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         val menuBar = findViewById<BottomNavigationView>(R.id.menuBar)
+
         menuBar.selectedItemId = R.id.menu_home
         menuBar.setOnItemSelectedListener {
             item -> when(item.itemId){
                 R.id.menu_home -> {
-                    if(this !is MainActivity){
-                        startActivity(Intent(this, MainActivity::class.java))
-                        overridePendingTransition(0, 0)
-                    }
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
                     true
                 }
                 R.id.menu_maps -> {
-                    if (this !is MapsActivity){
-                        startActivity(Intent(this, MapsActivity::class.java))
-                        overridePendingTransition(0, 0)
-                    }
+                    val intent = Intent(this, MapsActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
                     true
                 }
                 R.id.menu_graphics -> {
-                    if(this !is GraphicsActivity){
-                        startActivity(Intent(this, GraphicsActivity::class.java))
-                        overridePendingTransition(0, 0)
-                    }
+                    val intent = Intent(this, GraphicsActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
                     true
                 }
                 R.id.menu_settings -> {
-                    if(this !is SettingsActivity){
-                        startActivity(Intent(this, SettingsActivity::class.java))
-                        overridePendingTransition(0, 0)
-                    }
+                    val intent = Intent(this, SettingsActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
                     true
                 }
                 else -> false
