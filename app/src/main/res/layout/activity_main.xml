@@ -274,6 +274,16 @@
                     </LinearLayout>
                 </ScrollView>
 
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="353dp"
+                    android:text="TextView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView7" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>

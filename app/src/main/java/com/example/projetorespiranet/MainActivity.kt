@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
         val menuBar = findViewById<BottomNavigationView>(R.id.menuBar)
 
         menuBar.selectedItemId = R.id.menu_home
