@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val menuBar = findViewById<BottomNavigationView>(R.id.menuBar)
+        //preparar biding pra comunicação back
 
         menuBar.selectedItemId = R.id.menu_home
         menuBar.setOnItemSelectedListener {
