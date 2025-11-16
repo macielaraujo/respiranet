@@ -308,7 +308,7 @@
                         android:textAlignment="center">
 
                         <ImageView
-                            android:id="@+id/imageView"
+                            android:id="@+id/imageView_on"
                             android:layout_width="45dp"
                             android:layout_height="45dp"
                             android:layout_gravity="center|center_vertical"
@@ -338,7 +338,7 @@
                         android:textAlignment="center">
 
                         <ImageView
-                            android:id="@+id/imageView"
+                            android:id="@+id/imageView_instable"
                             android:layout_width="45dp"
                             android:layout_height="45dp"
                             android:layout_gravity="center|center_vertical"
@@ -369,7 +369,7 @@
                         android:textAlignment="center">
 
                         <ImageView
-                            android:id="@+id/imageView"
+                            android:id="@+id/imageView_off"
                             android:layout_width="45dp"
                             android:layout_height="45dp"
                             android:layout_gravity="center|center_vertical"
@@ -422,7 +422,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/textView16"
+                            android:id="@+id/txt_dados_recebidos"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="7dp"
@@ -453,6 +453,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView17">
 
                     <RadioGroup
+                        android:id="@+id/radio_group_tema"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
 
