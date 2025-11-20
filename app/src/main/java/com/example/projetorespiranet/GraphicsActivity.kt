@@ -116,7 +116,7 @@ class GraphicsActivity : AppCompatActivity() {
         val entries = ArrayList<Entry>()
 
         lineDataSet1 = LineDataSet(entries, "Medições")
-        lineDataSet1.color = resources.getColor(R.color.purple)
+        lineDataSet1.color = Color.BLUE
         lineDataSet1.setCircleColor(Color.BLUE)
         lineDataSet1.lineWidth = 2f
         lineDataSet1.circleRadius = 3f
@@ -126,7 +126,7 @@ class GraphicsActivity : AppCompatActivity() {
         lineData1 = LineData(lineDataSet1)
 
         lineDataSet2 = LineDataSet(entries, "Medições")
-        lineDataSet2.color = resources.getColor(R.color.blue)
+        lineDataSet2.color = Color.MAGENTA
         lineDataSet2.setCircleColor(Color.BLUE)
         lineDataSet2.lineWidth = 2f
         lineDataSet2.circleRadius = 3f

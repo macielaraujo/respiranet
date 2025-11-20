@@ -11,6 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjetoRespiraNet">
+        <meta-data
+            android:name="org.osmdroid.CONFIGURATION_FILE"
+            android:value="osmdroid/configuration.xml"/>
         <activity android:name=".MapsActivity"/>
         <activity android:name=".GraphicsActivity"/>
         <activity android:name=".SettingsActivity"/>
@@ -24,5 +27,6 @@
             </intent-filter>
         </activity>
     </application>
-
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 </manifest>
