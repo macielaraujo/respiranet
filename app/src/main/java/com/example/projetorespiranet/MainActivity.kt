@@ -94,13 +94,13 @@ class MainActivity : AppCompatActivity() {
                     overridePendingTransition(0, 0)
                     true
                 }
-                R.id.menu_settings -> {
-                    val intent = Intent(this, SettingsActivity::class.java)
-                    intent.addFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                    startActivity(intent)
-                    overridePendingTransition(0, 0)
-                    true
-                }
+//                R.id.menu_settings -> {
+//                    val intent = Intent(this, SettingsActivity::class.java)
+//                    intent.addFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP)
+//                    startActivity(intent)
+//                    overridePendingTransition(0, 0)
+//                    true
+//                }
                 else -> false
             }
         }

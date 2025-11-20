@@ -13,8 +13,8 @@
         android:id="@+id/menu_graphics"
         android:icon="@drawable/grafico"
         android:title="@string/item_menu_graphics" />
-    <item
-        android:id="@+id/menu_settings"
-        android:icon="@drawable/configuracoes"
-        android:title="@string/item_menu_settings" />
+<!--    <item-->
+<!--        android:id="@+id/menu_settings"-->
+<!--        android:icon="@drawable/configuracoes"-->
+<!--        android:title="@string/item_menu_settings" />-->
 </menu>
