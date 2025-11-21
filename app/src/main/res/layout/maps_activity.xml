@@ -56,12 +56,12 @@
                 android:textColor="@color/black" />
 
             <TextView
-                android:id="@+id/textView13"
+                android:id="@+id/esp_selecionada"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="1dp"
-                android:text="esp1"
+                android:text="--"
                 android:textColor="@color/dark" />
 
             <LinearLayout

@@ -58,7 +58,7 @@ class GraphicsActivity : AppCompatActivity() {
         setupChart()
 
         // Lista de dispositivos esp
-        val itens = listOf("ESP 1", "ESP 2", "ESP 3")
+        val itens = listOf("Restaurante Universitário", "Bloco 1: Merendeiro", "Bloco 2: Odontologia")
         val adapter = ArrayAdapter(
             this,
             android.R.layout.simple_list_item_1,

@@ -21,8 +21,9 @@ class MapsActivity : AppCompatActivity() {
 
     private lateinit var binding: MapsActivityBinding
     private lateinit var map: MapView
-
+    private lateinit var espLeiturasMap: Map<String, EspLeituras>
     data class EspDevice(val id: String, val lat: Double, val lng: Double)
+    data class EspLeituras(val id: String, val temp: Double, val umid: Double, val gas: String, val status: String)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,9 +34,10 @@ class MapsActivity : AppCompatActivity() {
 
         map = binding.map
         map.setTileSource(TileSourceFactory.MAPNIK)
-        map.controller.setZoom(5.0)
-        map.controller.setCenter(GeoPoint(-3.686242, -40.358920)) // centro do Brasil
+        map.controller.setZoom(14.0)
+        map.controller.setCenter(GeoPoint(-3.686242, -40.358920)) // centro de Sobral
 
+        carregarEspsLeituras()
         carregarEspsMock()
 
         binding.menuBar.selectedItemId = R.id.menu_maps
@@ -93,20 +95,63 @@ class MapsActivity : AppCompatActivity() {
 
         addMarkers(lista)
     }
+private fun addMarkers(esps: List<EspDevice>) {
+    map.overlays.clear()
 
-    private fun addMarkers(esps: List<EspDevice>) {
-        map.overlays.clear()
+    esps.forEach { esp ->
+        val marker = Marker(map)
+        marker.position = GeoPoint(esp.lat, esp.lng)
+        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+        marker.title = esp.id
 
-        esps.forEach { esp ->
-            val marker = Marker(map)
-            marker.position = GeoPoint(esp.lat, esp.lng)
-            marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-            marker.title = "ESP: ${esp.id}"
+        // Encontra a leitura correspondente usando o mapa
+        val leituras = espLeiturasMap[esp.id]
 
-            map.overlays.add(marker)
+        // *** 2. Anexar o objeto de leitura ao marcador ***
+        if (leituras != null) {
+            marker.setRelatedObject(leituras)
         }
 
-        map.invalidate() // atualiza o mapa
+        marker.setOnMarkerClickListener(object : Marker.OnMarkerClickListener {
+            override fun onMarkerClick(marker: Marker?, mapView: MapView?): Boolean {
+
+                // 3. Acessar o ID do dispositivo e o objeto de leitura
+                val clickedEspId = marker?.title
+                val clickedLeituras = marker?.relatedObject as? EspLeituras // Cast seguro
+
+                // 4. Atualizar os TextViews
+                binding.espSelecionada.text = clickedEspId
+
+                if (clickedLeituras != null) {
+                    binding.mapTemp.text = clickedLeituras.temp.toString()
+                    binding.mapUmidade.text = clickedLeituras.umid.toString()
+                    binding.mapGas.text = clickedLeituras.gas
+                    binding.mapStatus.text = clickedLeituras.status
+                } else {
+                    // Limpa ou define um valor padrão se as leituras não forem encontradas
+                    binding.mapTemp.text = "N/D"
+                    binding.mapUmidade.text = "N/D"
+                    // ... (outros)
+                }
+
+                // Garante que o balão (InfoWindow) seja exibido, mantendo a experiência de usuário
+                marker?.showInfoWindow()
+
+                // Retorna 'true' pois você lidou com o evento de clique
+                return true
+            }
+        })
+
+        map.overlays.add(marker)
+    }
+    map.invalidate() // atualiza o mapa
+}
+    private fun carregarEspsLeituras() {
+        val json = assets.open("dados.json").bufferedReader().use { it.readText() }
+        val leituras = Gson().fromJson(json, Array<EspLeituras>::class.java).toList()
+
+        // *** 1. Mapear a lista de leituras pelo ID ***
+        espLeiturasMap = leituras.associateBy { it.id }
     }
 
 

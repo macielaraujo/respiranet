@@ -1,0 +1,23 @@
+[
+  {
+    "id": "Restaurante Universitário",
+    "temp": 32.7,
+    "umid": 44,
+    "gas": "regular",
+    "status": "online"
+  },
+  {
+    "id": "Bloco 1: Merendeiro",
+    "temp": 30.5,
+    "umid": 44,
+    "gas": "regular",
+    "status": "online"
+  },
+  {
+    "id": "Bloco 2: Odontologia",
+    "temp": 28.7,
+    "umid": 44,
+    "gas": "regular",
+    "status": "online"
+  }
+]
