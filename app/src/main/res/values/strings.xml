@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">projeto RespiraNet</string>
+    <string name="app_name">RespiraNet</string>
     <string name="item_menu_home">Home</string>
     <string name="item_menu_maps">Mapa</string>
     <string name="item_menu_graphics">Gráficos</string>

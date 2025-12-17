@@ -31,6 +31,16 @@ class GraphicsActivity : AppCompatActivity() {
     private lateinit var lineData1: LineData
     private lateinit var lineData2: LineData
 
+    private fun abrirTela(destino: Class<*>) {
+        if (this::class.java == destino) return // evita abrir a mesma
+
+        val intent = Intent(this, destino).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
+        startActivity(intent)
+        overridePendingTransition(0, 0)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = GraphicsActivityBinding.inflate(layoutInflater)
@@ -56,6 +66,8 @@ class GraphicsActivity : AppCompatActivity() {
         }, 2000)
 
         setupChart()
+        aplicarTemaAoGrafico(binding.chartTemp)
+        aplicarTemaAoGrafico(binding.chartHumidity)
 
         // Lista de dispositivos esp
         val itens = listOf("Restaurante Universitário", "Bloco 1: Merendeiro", "Bloco 2: Odontologia")
@@ -70,69 +82,63 @@ class GraphicsActivity : AppCompatActivity() {
             Toast.makeText(this, "Clicou em: $item", Toast.LENGTH_SHORT).show()
         }
 
-        binding.menuBar.selectedItemId = R.id.menu_graphics
+
         binding.menuBar.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.menu_home -> {
-                    val intent = Intent(this, MainActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                    startActivity(intent)
-                    overridePendingTransition(0, 0)
+                    abrirTela(MainActivity::class.java)
                     true
                 }
-
                 R.id.menu_maps -> {
-                    val intent = Intent(this, MapsActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                    startActivity(intent)
-                    overridePendingTransition(0, 0)
+                    abrirTela(MapsActivity::class.java)
                     true
                 }
-
                 R.id.menu_graphics -> {
-                    val intent = Intent(this, GraphicsActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                    startActivity(intent)
-                    overridePendingTransition(0, 0)
+                    abrirTela(GraphicsActivity::class.java)
                     true
                 }
-
-//                R.id.menu_settings -> {
-//                    val intent = Intent(this, SettingsActivity::class.java)
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-//                    startActivity(intent)
-//                    overridePendingTransition(0, 0)
-//                    true
-//                }
-
                 else -> false
             }
         }
 
     }
 
-    private fun setupChart() {
-        // Lista inicial vazia
-        val entries = ArrayList<Entry>()
+    override fun onResume() {
+        super.onResume()
+        binding.menuBar.selectedItemId = R.id.menu_graphics
+    }
 
-        lineDataSet1 = LineDataSet(entries, "Medições")
-        lineDataSet1.color = Color.BLUE
-        lineDataSet1.setCircleColor(Color.BLUE)
-        lineDataSet1.lineWidth = 2f
-        lineDataSet1.circleRadius = 3f
-        lineDataSet1.mode = LineDataSet.Mode.LINEAR
-        lineDataSet1.setDrawValues(false)
+    private fun setupChart() {
+        val entries1 = ArrayList<Entry>()
+        val entries2 = ArrayList<Entry>()
+
+        // Configuração Dataset 1 (Temperatura - Laranja)
+        lineDataSet1 = LineDataSet(entries1, "Temperatura (°C)")
+        lineDataSet1.apply {
+            color = Color.parseColor("#FF9800") // Laranja vibrante
+            setCircleColor(Color.parseColor("#FF9800"))
+            lineWidth = 2.5f
+            circleRadius = 4f
+            setDrawCircleHole(true)
+            circleHoleColor = Color.TRANSPARENT // Efeito vazado
+            mode = LineDataSet.Mode.CUBIC_BEZIER // Linha suave/curvada
+            setDrawValues(false)
+        }
+
+        // Configuração Dataset 2 (Umidade - Ciano)
+        lineDataSet2 = LineDataSet(entries2, "Umidade (%)")
+        lineDataSet2.apply {
+            color = Color.parseColor("#00BCD4") // Ciano vibrante
+            setCircleColor(Color.parseColor("#00BCD4"))
+            lineWidth = 2.5f
+            circleRadius = 4f
+            setDrawCircleHole(true)
+            circleHoleColor = Color.TRANSPARENT
+            mode = LineDataSet.Mode.CUBIC_BEZIER
+            setDrawValues(false)
+        }
 
         lineData1 = LineData(lineDataSet1)
-
-        lineDataSet2 = LineDataSet(entries, "Medições")
-        lineDataSet2.color = Color.MAGENTA
-        lineDataSet2.setCircleColor(Color.BLUE)
-        lineDataSet2.lineWidth = 2f
-        lineDataSet2.circleRadius = 3f
-        lineDataSet2.mode = LineDataSet.Mode.LINEAR
-        lineDataSet2.setDrawValues(false)
-
         lineData2 = LineData(lineDataSet2)
 
         binding.chartTemp.apply {
@@ -141,15 +147,112 @@ class GraphicsActivity : AppCompatActivity() {
             setTouchEnabled(true)
             setPinchZoom(true)
             xAxis.position = XAxis.XAxisPosition.BOTTOM
+            xAxis.setDrawGridLines(true)
+            animateX(1000) // Animação ao abrir
         }
+
         binding.chartHumidity.apply {
             data = lineData2
             description.isEnabled = false
             setTouchEnabled(true)
             setPinchZoom(true)
             xAxis.position = XAxis.XAxisPosition.BOTTOM
+            xAxis.setDrawGridLines(true)
+            animateX(1000)
         }
     }
+
+    // A função de aplicar tema permanece igual, mas agora é chamada no onCreate
+    fun aplicarTemaAoGrafico(chart: LineChart) {
+        val isDarkMode = (resources.configuration.uiMode and
+                android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
+                android.content.res.Configuration.UI_MODE_NIGHT_YES
+
+        // No modo escuro usamos branco, no claro usamos um cinza escuro para melhor legibilidade
+        val corTexto = if (isDarkMode) Color.WHITE else Color.DKGRAY
+        // Grade sutil
+        val corGrade = if (isDarkMode) Color.parseColor("#22FFFFFF") else Color.parseColor("#11000000")
+
+        chart.apply {
+            xAxis.textColor = corTexto
+            xAxis.gridColor = corGrade
+
+            axisLeft.textColor = corTexto
+            axisLeft.gridColor = corGrade
+
+            axisRight.isEnabled = false // Desabilita o eixo da direita para visual mais limpo
+
+            legend.textColor = corTexto
+            invalidate()
+        }
+    }
+//    private fun setupChart() {
+//        // Lista inicial vazia
+//        val entries = ArrayList<Entry>()
+//
+//        lineDataSet1 = LineDataSet(entries, "Medições")
+//        lineDataSet1.color = Color.BLUE
+//        lineDataSet1.setCircleColor(Color.BLUE)
+//        lineDataSet1.lineWidth = 2f
+//        lineDataSet1.circleRadius = 3f
+//        lineDataSet1.mode = LineDataSet.Mode.LINEAR
+//        lineDataSet1.setDrawValues(false)
+//
+//        lineData1 = LineData(lineDataSet1)
+//
+//        lineDataSet2 = LineDataSet(entries, "Medições")
+//        lineDataSet2.color = Color.MAGENTA
+//        lineDataSet2.setCircleColor(Color.BLUE)
+//        lineDataSet2.lineWidth = 2f
+//        lineDataSet2.circleRadius = 3f
+//        lineDataSet2.mode = LineDataSet.Mode.LINEAR
+//        lineDataSet2.setDrawValues(false)
+//
+//        lineData2 = LineData(lineDataSet2)
+//
+//        binding.chartTemp.apply {
+//            data = lineData1
+//            description.isEnabled = false
+//            setTouchEnabled(true)
+//            setPinchZoom(true)
+//            xAxis.position = XAxis.XAxisPosition.BOTTOM
+//        }
+//        binding.chartHumidity.apply {
+//            data = lineData2
+//            description.isEnabled = false
+//            setTouchEnabled(true)
+//            setPinchZoom(true)
+//            xAxis.position = XAxis.XAxisPosition.BOTTOM
+//        }
+//    }
+//
+//    fun aplicarTemaAoGrafico(chart: LineChart) {
+//        val isDarkMode = (resources.configuration.uiMode and
+//                android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
+//                android.content.res.Configuration.UI_MODE_NIGHT_YES
+//
+//        val corTexto = if (isDarkMode) Color.WHITE else Color.BLACK
+//        val corGrade = if (isDarkMode) Color.parseColor("#33FFFFFF") else Color.parseColor("#33000000")
+//
+//        chart.apply {
+//            // Eixo X
+//            xAxis.textColor = corTexto
+//            xAxis.gridColor = corGrade
+//
+//            // Eixo Y (Esquerda e Direita)
+//            axisLeft.textColor = corTexto
+//            axisLeft.gridColor = corGrade
+//            axisRight.textColor = corTexto
+//            axisRight.gridColor = corGrade
+//
+//            // Legenda e Descrição
+//            legend.textColor = corTexto
+//            description.textColor = corTexto
+//
+//            // Atualiza o gráfico
+//            invalidate()
+//        }
+//    }
     fun addEntry(value: Float) {
         val index1 = lineDataSet1.entryCount // posição X automaticamente
         val index2 = lineDataSet2.entryCount // posição X automaticamente

@@ -1,10 +1,25 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.ProjetoRespiraNet" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-         <item name="colorPrimary">#10B981</item>
-<!--        <item name="navigationIcon">24dp</item>-->
-    </style>
+<!--<resources xmlns:tools="http://schemas.android.com/tools">-->
+<!--    &lt;!&ndash; Base application theme. &ndash;&gt;-->
+<!--    <style name="Base.Theme.ProjetoRespiraNet" parent="Theme.Material3.DayNight.NoActionBar">-->
+<!--        &lt;!&ndash; Customize your light theme here. &ndash;&gt;-->
+<!--         <item name="colorPrimary">@color/green</item>-->
+<!--        <item name="colorSecondary">@color/background</item>-->
+<!--&lt;!&ndash;        <item name="navigationIcon">24dp</item>&ndash;&gt;-->
+<!--    </style>-->
 
+<!--    <style name="Theme.ProjetoRespiraNet" parent="Base.Theme.ProjetoRespiraNet" />-->
+<!--</resources>-->
+<resources xmlns:tools="http://schemas.android.com/tools">
+<style name="Base.Theme.ProjetoRespiraNet" parent="Theme.Material3.DayNight.NoActionBar">
+    <item name="colorPrimary">@color/green_primary</item>
+    <item name="colorOnPrimary">@color/white</item>
+    <item name="colorPrimaryContainer">@color/green_light</item>
+
+    <item name="android:windowBackground">@color/md_theme_light_background</item>
+    <item name="colorSurface">@color/md_theme_light_surface</item>
+    <item name="colorOnSurface">@color/md_theme_light_onSurface</item>
+
+    <item name="colorControlActivated">@color/green_primary</item>
+</style>
     <style name="Theme.ProjetoRespiraNet" parent="Base.Theme.ProjetoRespiraNet" />
 </resources>

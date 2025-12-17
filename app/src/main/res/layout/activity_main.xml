@@ -26,6 +26,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="980dp">
 
+
+
                 <ImageView
                     android:id="@+id/imageView7"
                     android:layout_width="match_parent"
@@ -164,7 +166,7 @@
                                 android:layout_width="250dp"
                                 android:layout_height="140dp"
                                 android:layout_gravity="center"
-                                app:cardBackgroundColor="#FFFBEB"
+                                app:cardBackgroundColor="?attr/colorTertiaryContainer"
                                 app:cardCornerRadius="10dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -225,7 +227,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center"
                                 android:layout_marginStart="20dp"
-                                app:cardBackgroundColor="#E7FBEA"
+                                app:cardBackgroundColor="?attr/colorSecondaryContainer"
                                 app:cardCornerRadius="10dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toEndOf="@+id/card_temp"
@@ -286,7 +288,7 @@
                                 android:layout_height="140dp"
                                 android:layout_gravity="center"
                                 android:layout_marginStart="20dp"
-                                app:cardBackgroundColor="#E7E9FE"
+                                app:cardBackgroundColor="?attr/colorErrorContainer"
                                 app:cardCornerRadius="10dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toEndOf="@+id/card_umidade"
@@ -466,60 +468,23 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/textView15"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:text="Dados recebidos"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="@+id/linearLayout2"
-                    app:layout_constraintStart_toStartOf="@+id/linearLayout2"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
-
-                <ScrollView
-                    android:id="@+id/container_dados_recebidos"
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:background="@color/gray"
-                    app:layout_constraintEnd_toEndOf="@+id/textView15"
-                    app:layout_constraintStart_toStartOf="@+id/textView15"
-                    app:layout_constraintTop_toBottomOf="@+id/textView15">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/txt_dados_recebidos"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="10dp"
-                            android:layout_marginVertical="10dp"
-                            android:text="Dados recebidos: ..."
-                            android:textSize="12sp" />
-                    </LinearLayout>
-                </ScrollView>
-
-                <TextView
                     android:id="@+id/textView17"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
                     android:text="Personalização"
                     android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="@+id/container_dados_recebidos"
-                    app:layout_constraintStart_toStartOf="@+id/container_dados_recebidos"
-                    app:layout_constraintTop_toBottomOf="@+id/container_dados_recebidos" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
                 <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="100dp"
                     android:layout_marginTop="20dp"
-                    android:background="@color/background"
+                    android:background="?attr/colorSurfaceVariant"
                     app:layout_constraintEnd_toEndOf="@+id/textView17"
                     app:layout_constraintStart_toStartOf="@+id/textView17"
                     app:layout_constraintTop_toBottomOf="@+id/textView17">

@@ -25,6 +25,16 @@ class MapsActivity : AppCompatActivity() {
     data class EspDevice(val id: String, val lat: Double, val lng: Double)
     data class EspLeituras(val id: String, val temp: Double, val umid: Double, val gas: String, val status: String)
 
+    private fun abrirTela(destino: Class<*>) {
+        if (this::class.java == destino) return // evita abrir a mesma
+
+        val intent = Intent(this, destino).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
+        startActivity(intent)
+        overridePendingTransition(0, 0)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = MapsActivityBinding.inflate(layoutInflater)
@@ -40,37 +50,21 @@ class MapsActivity : AppCompatActivity() {
         carregarEspsLeituras()
         carregarEspsMock()
 
-        binding.menuBar.selectedItemId = R.id.menu_maps
+
         binding.menuBar.setOnItemSelectedListener {
-                item -> when(item.itemId){
+                item -> when (item.itemId) {
             R.id.menu_home -> {
-                val intent = Intent(this, MainActivity::class.java)
-                intent.addFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                startActivity(intent)
-                overridePendingTransition(0, 0)
+                abrirTela(MainActivity::class.java)
                 true
             }
             R.id.menu_maps -> {
-                val intent = Intent(this, MapsActivity::class.java)
-                intent.addFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                startActivity(intent)
-                overridePendingTransition(0, 0)
+                abrirTela(MapsActivity::class.java)
                 true
             }
             R.id.menu_graphics -> {
-                val intent = Intent(this, GraphicsActivity::class.java)
-                intent.addFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                startActivity(intent)
-                overridePendingTransition(0, 0)
+                abrirTela(GraphicsActivity::class.java)
                 true
             }
-//            R.id.menu_settings -> {
-//                val intent = Intent(this, SettingsActivity::class.java)
-//                intent.addFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP)
-//                startActivity(intent)
-//                overridePendingTransition(0, 0)
-//                true
-//            }
             else -> false
         }
 
@@ -88,6 +82,12 @@ class MapsActivity : AppCompatActivity() {
         }
 
     }
+
+    override fun onResume() {
+        super.onResume()
+        binding.menuBar.selectedItemId = R.id.menu_maps
+    }
+
 
     private fun carregarEspsMock() {
         val json = assets.open("esps.json").bufferedReader().use { it.readText() }

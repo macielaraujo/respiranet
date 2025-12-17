@@ -1,7 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.ProjetoRespiraNet" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">#34D399</item>
+        <item name="colorOnPrimary">#064E3B</item>
+
+        <item name="android:windowBackground">@color/md_theme_dark_background</item>
+        <item name="colorSurface">@color/md_theme_dark_surface</item>
+        <item name="colorOnSurface">@color/md_theme_dark_onSurface</item>
+
+        <item name="colorControlActivated">#34D399</item>
     </style>
 </resources>

@@ -10,6 +10,7 @@ import android.content.Intent
 import android.util.Log
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import androidx.appcompat.app.AppCompatDelegate
 import com.example.projetorespiranet.databinding.ActivityMainBinding
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -18,6 +19,17 @@ import java.util.Locale
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    private fun abrirTela(destino: Class<*>) {
+        if (this::class.java == destino) return // evita abrir a mesma
+
+        val intent = Intent(this, destino).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
+        startActivity(intent)
+        overridePendingTransition(0, 0)
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,52 +69,58 @@ class MainActivity : AppCompatActivity() {
         binding.contSensoresOff.text = "$contDesativados Sensores"
 
         //dados recebidos
-        val mensagem = "temp: 28 umidade: 52"
-        binding.txtDadosRecebidos.text = mensagem
+//        val mensagem = "temp: 28 umidade: 52"
+//        binding.txtDadosRecebidos.text = mensagem
 
         //personalização do tema
-        val checkedId = binding.radioGroupTema.checkedRadioButtonId
 
-        if (checkedId != -1) {
-            val selected = findViewById<RadioButton>(checkedId)
-            val temaSelecionado = selected.text.toString()
-            Log.d("RADIO", "Selecionado agora: $temaSelecionado")
+        val sharedPrefs = getSharedPreferences("respira_prefs", MODE_PRIVATE)
+        val editor = sharedPrefs.edit()
+
+        val isDarkMode = sharedPrefs.getBoolean("dark_mode", false)
+        if (isDarkMode) {
+            binding.radioButtonEscuro.isChecked = true
+        } else {
+            binding.radioButtonClaro.isChecked = true
+        }
+
+        binding.radioGroupTema.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.radioButton_claro -> {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    editor.putBoolean("dark_mode", false)
+                }
+                R.id.radioButton_escuro -> {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    editor.putBoolean("dark_mode", true)
+                }
+            }
+            editor.apply() // Salva a escolha para a próxima vez que o app abrir
         }
 
 
-        binding.menuBar.selectedItemId = R.id.menu_home
+
         binding.menuBar.setOnItemSelectedListener {
-            item -> when(item.itemId){
-                R.id.menu_home -> {
-                    val intent = Intent(this, MainActivity::class.java)
-                    intent.addFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP) //Intent.FLAG_ACTIVITY_CLEAR_TOP or
-                    startActivity(intent)
-                    overridePendingTransition(0, 0)
-                    true
-                }
-                R.id.menu_maps -> {
-                    val intent = Intent(this, MapsActivity::class.java)
-                    intent.addFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                    startActivity(intent)
-                    overridePendingTransition(0, 0)
-                    true
-                }
-                R.id.menu_graphics -> {
-                    val intent = Intent(this, GraphicsActivity::class.java)
-                    intent.addFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                    startActivity(intent)
-                    overridePendingTransition(0, 0)
-                    true
-                }
-//                R.id.menu_settings -> {
-//                    val intent = Intent(this, SettingsActivity::class.java)
-//                    intent.addFlags( Intent.FLAG_ACTIVITY_SINGLE_TOP)
-//                    startActivity(intent)
-//                    overridePendingTransition(0, 0)
-//                    true
-//                }
-                else -> false
+            item -> when (item.itemId) {
+            R.id.menu_home -> {
+                abrirTela(MainActivity::class.java)
+                true
             }
+            R.id.menu_maps -> {
+                abrirTela(MapsActivity::class.java)
+                true
+            }
+            R.id.menu_graphics -> {
+                abrirTela(GraphicsActivity::class.java)
+                true
+            }
+            else -> false
+        }
         }
     }
+    override fun onResume() {
+        super.onResume()
+        binding.menuBar.selectedItemId = R.id.menu_home
+    }
+
 }

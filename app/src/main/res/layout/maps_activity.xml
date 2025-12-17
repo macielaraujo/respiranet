@@ -10,7 +10,7 @@
         android:id="@+id/toolbar_maps"
         android:layout_width="409dp"
         android:layout_height="wrap_content"
-        android:background="@color/background"
+        android:background="?attr/colorSurface"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
@@ -32,11 +32,12 @@
         android:id="@+id/card_leituras_map"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="@color/gray"
+        android:background="?attr/colorSurface"
         app:cardBackgroundColor="@color/gray"
         app:cardCornerRadius="4sp"
         app:cardElevation="2sp"
         app:cardMaxElevation="2sp"
+        app:layout_constraintBottom_toTopOf="@+id/menuBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/map">
@@ -44,6 +45,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="?attr/colorSurface"
             android:orientation="vertical">
 
             <TextView
@@ -53,7 +55,7 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginVertical="7dp"
                 android:text="Identificador ESP"
-                android:textColor="@color/black" />
+                android:textColor="?android:attr/textColorPrimary" />
 
             <TextView
                 android:id="@+id/esp_selecionada"
@@ -62,7 +64,7 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="1dp"
                 android:text="--"
-                android:textColor="@color/dark" />
+                android:textColor="?attr/colorPrimary" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -99,7 +101,7 @@
                                 android:layout_marginLeft="5dp"
                                 android:layout_marginTop="7dp"
                                 android:text="Temperatura"
-                                android:textColor="@color/blue" />
+                                android:textColor="?attr/colorPrimary" />
 
                             <TextView
                                 android:id="@+id/map_temp"
@@ -107,7 +109,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="5dp"
                                 android:text="--"
-                                android:textColor="#666262"
+                                android:textColor="?android:attr/textColorSecondary"
                                 android:textSize="12sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -144,7 +146,7 @@
                                 android:layout_marginLeft="5dp"
                                 android:layout_marginTop="7dp"
                                 android:text="Umidade"
-                                android:textColor="@color/blue" />
+                                android:textColor="?attr/colorPrimary" />
 
                             <TextView
                                 android:id="@+id/map_umidade"
@@ -152,7 +154,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="5dp"
                                 android:text="--"
-                                android:textColor="#666262"
+                                android:textColor="?android:attr/textColorSecondary"
                                 android:textSize="12sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -196,7 +198,7 @@
                                 android:layout_marginLeft="5dp"
                                 android:layout_marginTop="7dp"
                                 android:text="Nível de gases"
-                                android:textColor="@color/blue" />
+                                android:textColor="?attr/colorPrimary" />
 
                             <TextView
                                 android:id="@+id/map_gas"
@@ -204,7 +206,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="5dp"
                                 android:text="--"
-                                android:textColor="#666262"
+                                android:textColor="?android:attr/textColorSecondary"
                                 android:textSize="12sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -241,7 +243,7 @@
                                 android:layout_marginLeft="5dp"
                                 android:layout_marginTop="7dp"
                                 android:text="Status"
-                                android:textColor="@color/blue" />
+                                android:textColor="?attr/colorPrimary" />
 
                             <TextView
                                 android:id="@+id/map_status"
@@ -249,7 +251,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="5dp"
                                 android:text="--"
-                                android:textColor="#666262"
+                                android:textColor="?android:attr/textColorSecondary"
                                 android:textSize="12sp" />
                         </LinearLayout>
                     </LinearLayout>

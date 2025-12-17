@@ -14,4 +14,16 @@
     <color name="purple_soft">#E7E9FE</color>
     <color name="yellow_soft">#FFFBEB</color>
     <color name="green_soft">#EBFFEE</color>
+
+    <color name="green_primary">#10B981</color>
+    <color name="green_dark">#065F46</color>
+    <color name="green_light">#D1FAE5</color>
+
+    <color name="md_theme_light_background">#F9FAFB</color>
+    <color name="md_theme_light_surface">#FFFFFF</color>
+    <color name="md_theme_light_onSurface">#111827</color>
+
+    <color name="md_theme_dark_background">#111827</color>
+    <color name="md_theme_dark_surface">#1F2937</color>
+    <color name="md_theme_dark_onSurface">#F9FAFB</color>
 </resources>
