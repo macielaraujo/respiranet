@@ -31,6 +31,8 @@ class GraphicsActivity : AppCompatActivity() {
     private lateinit var lineData1: LineData
     private lateinit var lineData2: LineData
 
+    private var dispositivoSelecionado: String = ""
+
     private fun abrirTela(destino: Class<*>) {
         if (this::class.java == destino) return // evita abrir a mesma
 
@@ -57,30 +59,21 @@ class GraphicsActivity : AppCompatActivity() {
             overridePendingTransition(0,0)
         }
 
-        Handler(Looper.getMainLooper()).postDelayed(object : Runnable {
-            override fun run() {
-                val novoValor = (5..40).random().toFloat()
-                addEntry(novoValor)
-                Handler(Looper.getMainLooper()).postDelayed(this, 2000)
-            }
-        }, 2000)
+//        Handler(Looper.getMainLooper()).postDelayed(object : Runnable {
+//            override fun run() {
+//                val novoValor = (5..40).random().toFloat()
+//                addEntry(novoValor)
+//                Handler(Looper.getMainLooper()).postDelayed(this, 2000)
+//            }
+//        }, 2000)
 
         setupChart()
+        configurarSeletor()
+        iniciarSimulacaoDeDados()
         aplicarTemaAoGrafico(binding.chartTemp)
         aplicarTemaAoGrafico(binding.chartHumidity)
 
-        // Lista de dispositivos esp
-        val itens = listOf("Restaurante Universitário", "Bloco 1: Merendeiro", "Bloco 2: Odontologia")
-        val adapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_list_item_1,
-            itens
-        )
-        binding.listItemsDevices.adapter = adapter
-        binding.listItemsDevices.setOnItemClickListener { _, _, position, _ ->
-            val item = itens[position]
-            Toast.makeText(this, "Clicou em: $item", Toast.LENGTH_SHORT).show()
-        }
+
 
 
         binding.menuBar.setOnItemSelectedListener { item ->
@@ -186,73 +179,6 @@ class GraphicsActivity : AppCompatActivity() {
             invalidate()
         }
     }
-//    private fun setupChart() {
-//        // Lista inicial vazia
-//        val entries = ArrayList<Entry>()
-//
-//        lineDataSet1 = LineDataSet(entries, "Medições")
-//        lineDataSet1.color = Color.BLUE
-//        lineDataSet1.setCircleColor(Color.BLUE)
-//        lineDataSet1.lineWidth = 2f
-//        lineDataSet1.circleRadius = 3f
-//        lineDataSet1.mode = LineDataSet.Mode.LINEAR
-//        lineDataSet1.setDrawValues(false)
-//
-//        lineData1 = LineData(lineDataSet1)
-//
-//        lineDataSet2 = LineDataSet(entries, "Medições")
-//        lineDataSet2.color = Color.MAGENTA
-//        lineDataSet2.setCircleColor(Color.BLUE)
-//        lineDataSet2.lineWidth = 2f
-//        lineDataSet2.circleRadius = 3f
-//        lineDataSet2.mode = LineDataSet.Mode.LINEAR
-//        lineDataSet2.setDrawValues(false)
-//
-//        lineData2 = LineData(lineDataSet2)
-//
-//        binding.chartTemp.apply {
-//            data = lineData1
-//            description.isEnabled = false
-//            setTouchEnabled(true)
-//            setPinchZoom(true)
-//            xAxis.position = XAxis.XAxisPosition.BOTTOM
-//        }
-//        binding.chartHumidity.apply {
-//            data = lineData2
-//            description.isEnabled = false
-//            setTouchEnabled(true)
-//            setPinchZoom(true)
-//            xAxis.position = XAxis.XAxisPosition.BOTTOM
-//        }
-//    }
-//
-//    fun aplicarTemaAoGrafico(chart: LineChart) {
-//        val isDarkMode = (resources.configuration.uiMode and
-//                android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
-//                android.content.res.Configuration.UI_MODE_NIGHT_YES
-//
-//        val corTexto = if (isDarkMode) Color.WHITE else Color.BLACK
-//        val corGrade = if (isDarkMode) Color.parseColor("#33FFFFFF") else Color.parseColor("#33000000")
-//
-//        chart.apply {
-//            // Eixo X
-//            xAxis.textColor = corTexto
-//            xAxis.gridColor = corGrade
-//
-//            // Eixo Y (Esquerda e Direita)
-//            axisLeft.textColor = corTexto
-//            axisLeft.gridColor = corGrade
-//            axisRight.textColor = corTexto
-//            axisRight.gridColor = corGrade
-//
-//            // Legenda e Descrição
-//            legend.textColor = corTexto
-//            description.textColor = corTexto
-//
-//            // Atualiza o gráfico
-//            invalidate()
-//        }
-//    }
     fun addEntry(value: Float) {
         val index1 = lineDataSet1.entryCount // posição X automaticamente
         val index2 = lineDataSet2.entryCount // posição X automaticamente
@@ -273,15 +199,62 @@ class GraphicsActivity : AppCompatActivity() {
     }
     fun resetChart() {
         lineDataSet1.clear()
-        lineData1.notifyDataChanged()
-        binding.chartTemp.notifyDataSetChanged()
-        binding.chartTemp.invalidate()
-
         lineDataSet2.clear()
+
         lineData1.notifyDataChanged()
+        lineData2.notifyDataChanged()
+
+        binding.chartTemp.notifyDataSetChanged()
         binding.chartHumidity.notifyDataSetChanged()
+
+        binding.chartTemp.invalidate()
         binding.chartHumidity.invalidate()
     }
 
+    private fun configurarSeletor() {
+        val itens = listOf("Restaurante Universitário", "Bloco 1: Merendeiro", "Bloco 2: Odontologia")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, itens)
 
+        binding.autoCompleteTextView.setAdapter(adapter)
+
+        // Evento de seleção (O "Select" do Android)
+        binding.autoCompleteTextView.setOnItemClickListener { _, _, position, _ ->
+            dispositivoSelecionado = itens[position]
+
+            // 1. Limpa o gráfico atual para renderizar o novo
+            resetChart()
+
+            // 2. Simula o carregamento de dados históricos específicos (opcional)
+            gerarDadosIniciaisParaDispositivo(dispositivoSelecionado)
+
+            Toast.makeText(this, "Monitorando: $dispositivoSelecionado", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun gerarDadosIniciaisParaDispositivo(nome: String) {
+        // Aqui você poderia carregar dados reais.
+        // Vamos apenas gerar 5 pontos aleatórios para dar a sensação de mudança.
+        for (i in 1..5) {
+            val valorFake = when (nome) {
+                "Restaurante Universitário" -> (30..40).random().toFloat()
+                "Bloco 1: Merendeiro" -> (20..25).random().toFloat()
+                else -> (15..20).random().toFloat()
+            }
+            addEntry(valorFake)
+        }
+    }
+
+    private fun iniciarSimulacaoDeDados() {
+        val handler = Handler(Looper.getMainLooper())
+        handler.post(object : Runnable {
+            override fun run() {
+                // Só adiciona dados se um dispositivo estiver selecionado
+                if (dispositivoSelecionado.isNotEmpty()) {
+                    val novoValor = (10..45).random().toFloat()
+                    addEntry(novoValor)
+                }
+                handler.postDelayed(this, 2000)
+            }
+        })
+    }
 }

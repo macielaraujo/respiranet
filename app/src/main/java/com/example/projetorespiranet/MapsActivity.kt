@@ -44,8 +44,9 @@ class MapsActivity : AppCompatActivity() {
 
         map = binding.map
         map.setTileSource(TileSourceFactory.MAPNIK)
-        map.controller.setZoom(14.0)
-        map.controller.setCenter(GeoPoint(-3.686242, -40.358920)) // centro de Sobral
+        map.setMultiTouchControls(true)
+        map.controller.setZoom(18.0)
+        map.controller.setCenter(GeoPoint(-3.693269, -40.354094)) // centro de Sobral
 
         carregarEspsLeituras()
         carregarEspsMock()

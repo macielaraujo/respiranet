@@ -80,8 +80,12 @@ class MainActivity : AppCompatActivity() {
         val isDarkMode = sharedPrefs.getBoolean("dark_mode", false)
         if (isDarkMode) {
             binding.radioButtonEscuro.isChecked = true
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            editor.putBoolean("dark_mode", true)
         } else {
             binding.radioButtonClaro.isChecked = true
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            editor.putBoolean("dark_mode", false)
         }
 
         binding.radioGroupTema.setOnCheckedChangeListener { _, checkedId ->
