@@ -10,13 +10,14 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/logorespiranetresumida"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ProjetoRespiraNet">
+        android:theme="@style/Theme.ProjetoRespiraNet"
+        android:usesCleartextTraffic="true">
         <meta-data
             android:name="org.osmdroid.CONFIGURATION_FILE"
             android:value="osmdroid/configuration.xml"/>
         <activity android:name=".MapsActivity" android:launchMode="singleTop"/>
         <activity android:name=".GraphicsActivity" android:launchMode="singleTop"/>
-<!--        <activity android:name=".SettingsActivity"/>-->
+        <activity android:name=".SettingsActivity"/>
         <activity
             android:name=".MainActivity"
             android:exported="true" android:launchMode="singleTop">

@@ -1,17 +1,25 @@
 package com.example.projetorespiranet
 
-import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.projetorespiranet.databinding.ActivityMainBinding
+import com.example.projetorespiranet.network.RetrofitClient
+import com.example.projetorespiranet.network.RespiraNetApi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.Dispatchers
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -19,6 +27,8 @@ import java.util.Locale
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var api: RespiraNetApi
+    private var pollingJob: Job? = null
 
     private fun abrirTela(destino: Class<*>) {
         if (this::class.java == destino) return // evita abrir a mesma
@@ -41,6 +51,9 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        // Initialize API
+        api = RetrofitClient.getApi(this)
+
         val hoje = LocalDate.now()
         val dia = hoje.format(DateTimeFormatter.ofPattern("dd", Locale("pt", "BR")))
         val mes = hoje.format(DateTimeFormatter.ofPattern("MMMM", Locale("pt", "BR")))
@@ -48,25 +61,8 @@ class MainActivity : AppCompatActivity() {
         val dataFormatada = "$dia de $mesCapitalizado"
         binding.txtDate.text = dataFormatada
 
-//        Dados do card de Umidade
-        binding.txtValueUmidade.text = "52"
-        binding.txtStatusSensorUmidade.text = "Ativo"
-
-        //Dados do card de Temperatura
-        binding.txtValueTemp.text = "28"
-        binding.txtStatusSensorTemp.text = "Ativo"
-
-        //Dados do card de condição do ambiente
-        binding.cardStatusLocal.text = "Merendeiro"
-        binding.cardStatusResultado.text = "Seguro"
-
-        //status dos dispositivos
-        val contAtivos = 7
-        val contInstaveis = 3
-        val contDesativados = 2
-        binding.contSensoresAtivos.text = "$contAtivos Sensores"
-        binding.contSensoresInstaveis.text = "$contInstaveis Sensores"
-        binding.contSensoresOff.text = "$contDesativados Sensores"
+    // Start polling updates
+    iniciarAtualizacaoAutomatica()
 
         //dados recebidos
 //        val mensagem = "temp: 28 umidade: 52"
@@ -125,6 +121,66 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         binding.menuBar.selectedItemId = R.id.menu_home
+    }
+
+    private fun iniciarAtualizacaoAutomatica() {
+        pollingJob = lifecycleScope.launch {
+            // simplistic choice: nodeId 1; could be user-selected later
+            val nodeIdSelecionado = 1
+            while (isActive) {
+                atualizarDashboard(nodeIdSelecionado)
+                atualizarResumo()
+                delay(30000)
+            }
+        }
+    }
+
+    private suspend fun atualizarDashboard(nodeId: Int) {
+        try {
+            // refresh api in case base URL changed elsewhere
+            api = RetrofitClient.getApi(this@MainActivity)
+            val status = api.getNodeStatus(nodeId)
+
+            withContext(Dispatchers.Main) {
+                binding.txtValueTemp.text = "${status.sensors.temperature?.value?.toInt() ?: 0}"
+                binding.txtStatusSensorTemp.text = if (status.status == "online") "Ativo" else "Offline"
+
+                binding.txtValueUmidade.text = "${status.sensors.humidity?.value?.toInt() ?: 0}"
+                binding.txtStatusSensorUmidade.text = if (status.status == "online") "Ativo" else "Offline"
+
+                binding.cardStatusLocal.text = status.description
+                binding.cardStatusResultado.text = when (status.airQuality) {
+                    "safe" -> "Seguro"
+                    "warning" -> "Atenção"
+                    "critical" -> "Crítico"
+                    else -> "Desconhecido"
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("MainActivity", "Erro ao buscar status: ${e.message}", e)
+            withContext(Dispatchers.Main) {
+                Toast.makeText(this@MainActivity, "Erro ao atualizar dados", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private suspend fun atualizarResumo() {
+        try {
+            val summary = api.getStatusSummary()
+            withContext(Dispatchers.Main) {
+                binding.contSensoresAtivos.text = "${summary.onlineNodes} Sensores"
+                binding.contSensoresOff.text = "${summary.offlineNodes} Sensores"
+                val instaveis = summary.totalNodes - summary.onlineNodes - summary.offlineNodes
+                binding.contSensoresInstaveis.text = "$instaveis Sensores"
+            }
+        } catch (e: Exception) {
+            Log.e("MainActivity", "Erro ao buscar resumo: ${e.message}", e)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        pollingJob?.cancel()
     }
 
 }
