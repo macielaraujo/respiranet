@@ -11,8 +11,10 @@ object ConfigManager {
     private const val PREFS_NAME = "respira_prefs"
     private const val KEY_BASE_URL = "base_url"
     private const val KEY_NODES_CONFIG = "nodes_config"
-    private const val DEFAULT_BASE_URL = "http://192.168.1.100:8000/"
+//    private const val DEFAULT_BASE_URL = "http://192.168.1.100:8000/"
 
+    private const val DEFAULT_BASE_URL = "http://192.168.0.6:8000/"  //servidor máquina mauro
+//private const val DEFAULT_BASE_URL = "http://10.0.2.2:8000/" //servidor para rodar no emulador
     private fun getPrefs(context: Context): SharedPreferences {
         return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     }
