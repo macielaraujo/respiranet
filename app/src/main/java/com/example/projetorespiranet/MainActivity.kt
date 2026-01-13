@@ -11,7 +11,9 @@ import android.util.Log
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.lifecycleScope
 import com.example.projetorespiranet.databinding.ActivityMainBinding
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -69,10 +71,31 @@ class MainActivity : AppCompatActivity() {
         binding.contSensoresOff.text = "$contDesativados Sensores"
 
         //dados recebidos
-//        val mensagem = "temp: 28 umidade: 52"
-//        binding.txtDadosRecebidos.text = mensagem
+        lifecycleScope.launch {
+            try {
+                val response = api.getNodeStatus(1) // ID do nó selecionado
 
-        //personalização do tema
+                binding.txtValueTemp.text = "${response.sensors.temperature?.value?.toInt() ?: 0}"
+                binding.txtValueUmidade.text = "${response.sensors.humidity?.value?.toInt() ?: 0}"
+                binding.cardStatusLocal.text = response.description
+
+                // Mapear air_quality para português
+                binding.cardStatusResultado.text = when(response.airQuality) {
+                    "safe" -> "Seguro"
+                    "warning" -> "Atenção"
+                    "critical" -> "Crítico"
+                    else -> "Desconhecido"
+                }
+
+                // Verificar se está online
+                binding.txtStatusSensorTemp.text = if(response.status == "online") "Ativo" else "Offline"
+                binding.txtStatusSensorUmidade.text = if(response.status == "online") "Ativo" else "Offline"
+
+            } catch (e: Exception) {
+                Log.e("MainActivity", "Erro ao buscar dados: ${e.message}")
+                Toast.makeText(this, "Erro ao conectar com a API", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         val sharedPrefs = getSharedPreferences("respira_prefs", MODE_PRIVATE)
         val editor = sharedPrefs.edit()
