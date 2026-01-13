@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -12,12 +13,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjetoRespiraNet"
         android:usesCleartextTraffic="true">
+
         <meta-data
             android:name="org.osmdroid.CONFIGURATION_FILE"
             android:value="osmdroid/configuration.xml"/>
         <activity android:name=".MapsActivity" android:launchMode="singleTop"/>
         <activity android:name=".GraphicsActivity" android:launchMode="singleTop"/>
-        <activity android:name=".SettingsActivity"/>
+<!--        <activity android:name=".SettingsActivity"/>-->
         <activity
             android:name=".MainActivity"
             android:exported="true" android:launchMode="singleTop">
@@ -28,7 +30,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+
 </manifest>
